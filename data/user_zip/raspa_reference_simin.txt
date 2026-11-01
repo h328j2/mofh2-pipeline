@@ -1,0 +1,27 @@
+SimulationType                MonteCarlo
+NumberOfCycles                2000
+NumberOfInitializationCycles  2000
+PrintEvery                    250
+Restart File                  no
+
+RemoveAtomNumberCodeFromLabel yes
+
+CutOffVDW                     12.8
+Forcefield                    UFF_FH
+
+Framework 0
+FrameworkName this_name_changes
+UnitCells 2 2 2
+HeliumVoidFraction 0.8000
+ExternalTemperature 77
+ExternalPressure 2E5
+
+
+Component 0 MoleculeName            hydrogen
+            StartingBead             0
+            MoleculeDefinition       TraPPE
+            IdealGasRosenbluthWeight 1.0
+            TranslationProbability   1.0
+            ReinsertionProbability   1.0
+            SwapProbability          1.0
+            CreateNumberOfMolecules  0

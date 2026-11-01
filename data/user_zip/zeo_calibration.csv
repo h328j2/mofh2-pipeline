@@ -1,0 +1,7 @@
+descriptor,zeo_column,pearson_r,slope,intercept,MAE_raw,MAE_calibrated
+lcd,lcd_zeo,0.9903,0.9649,0.2939,0.3481,0.3631
+pld,pld_zeo,0.9461,1.1449,-0.1004,1.2206,1.1138
+surface_area_m2g,sa_m2g_zeo,0.9862,0.9166,463.7814,268.0949,184.7261
+surface_area_m2cm3,sa_m2cm3_zeo,0.9117,0.7501,613.9341,259.8832,188.2727
+density,density_pmg,1.0,1.0,0.0,0.0,0.0
+void_fraction,vf_zeo_0.0,0.9363,1.4132,-0.3271,0.0637,0.0509

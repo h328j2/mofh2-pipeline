@@ -1,0 +1,102 @@
+[
+ {
+  "id": "irmof1",
+  "name": "IRMOF-1 (MOF-5)",
+  "tag": "Open pore · Zn₄O nodes on a pcu net, like most hMOFs",
+  "raspa": "IRMOF-1",
+  "cells": "1×1×1",
+  "vf": 0.807,
+  "lcd": 15.08,
+  "pld": 8.15,
+  "density": 0.593,
+  "pill": [
+   "ok",
+   "Accessible · 2.5× the gas-only floor"
+  ],
+  "text": "The open-pore case with a real structure. At 2 bar the framework holds 13.7 g/L, and most molecules sit against the walls. At 100 bar the walls are full and the pore centres fill as well: 62.1 g/L, 2.5 times what the same empty space would hold as plain gas. Deliverable capacity is 48.4 g/L. Most hMOFs are built from Zn₄O nodes on this same pcu net, so this is a useful sanity check on the dataset's scale (hMOF median at 100 bar: 46.6 g/L).",
+  "init": 500,
+  "cyc": 1000,
+  "cycles": "500 equilibration + 1,000 production",
+  "vfSrc": "helium probe, RASPA Widom"
+ },
+ {
+  "id": "zif8",
+  "name": "ZIF-8",
+  "tag": "Small cages · 11.8 Å cages behind ~3 Å windows",
+  "raspa": "ZIF-8",
+  "cells": "2×2×2",
+  "vf": 0.49,
+  "lcd": 11.8,
+  "pld": 2.92,
+  "density": 0.925,
+  "pill": [
+   "info",
+   "Binds more at 2 bar, delivers less"
+  ],
+  "text": "Smaller cages hold H₂ more tightly, so ZIF-8 beats IRMOF-1 at 2 bar (21.8 vs 13.7 g/L). It has much less pore volume, so it falls far behind at 100 bar (42.3 vs 62.1 g/L). Its deliverable capacity of 20.5 g/L is less than half of IRMOF-1's, because the hydrogen that binds strongly at low pressure never leaves. This is the trade-off your models learned: the top-ranked MOFs combine high void fraction with wide pores. The window in this rigid model is 2.9 Å; the real crystal flexes enough to let H₂ in.",
+  "init": 500,
+  "cyc": 1000,
+  "cycles": "500 equilibration + 1,000 production",
+  "vfSrc": "helium probe, RASPA Widom"
+ },
+ {
+  "id": "zif1",
+  "name": "ZIF-1",
+  "tag": "Closed cages · 6.5 Å cages behind 1.9 Å windows",
+  "raspa": "ZIF-1",
+  "cells": "3×2×2",
+  "vf": 0.323,
+  "lcd": 6.47,
+  "pld": 1.88,
+  "density": 1.207,
+  "pill": [
+   "warn",
+   "Uptake in cages H₂ cannot reach"
+  ],
+  "text": "The windows (1.9 Å) are narrower than an H₂ molecule (2.9 Å), so no gas can get from outside into these cages. Standard GCMC never checks that: it tries insertions anywhere in the box and keeps any that are energetically favourable. The result is 18.3 g/L at 2 bar and 26.1 g/L at 100 bar of hydrogen that could never get there. Compare with “ZIF-1, cages blocked”, the same run with those cages excluded.",
+  "init": 500,
+  "cyc": 1000,
+  "cycles": "500 equilibration + 1,000 production",
+  "vfSrc": "helium probe, RASPA Widom"
+ },
+ {
+  "id": "zif1b",
+  "name": "ZIF-1, cages blocked",
+  "tag": "Same structure, inaccessible cages excluded",
+  "raspa": "ZIF-1-blocked",
+  "cells": "3×2×2",
+  "vf": 0.323,
+  "lcd": 6.47,
+  "pld": 1.88,
+  "density": 1.207,
+  "pill": [
+   "info",
+   "Pocket blocking on · zero uptake"
+  ],
+  "text": "Identical settings, but every cage that H₂ cannot reach through a window is blocked (26 blocking spheres per unit cell, generated here from the pore map). Uptake drops to 0.0 g/L at both pressures. This is the question behind your zero-uptake analysis: in hMOF, small-PLD MOFs whose cages are also tiny (median LCD 2.25 Å) show zero, while small-PLD MOFs with larger cages (median LCD 3.75 Å) show non-zero uptake. That pattern fits a dataset simulated without pocket blocking. Re-running a few of those hMOFs both ways in RASPA would settle it.",
+  "init": 500,
+  "cyc": 1000,
+  "cycles": "500 equilibration + 1,000 production",
+  "vfSrc": "helium probe, RASPA Widom"
+ },
+ {
+  "id": "mil53",
+  "name": "MIL-53(Cr) narrow pore",
+  "tag": "Tight channels · LCD 3.0 Å, PLD 2.1 Å",
+  "raspa": "MIL-53(Cr)lt",
+  "cells": "2×4×4",
+  "vf": 0.043,
+  "lcd": 2.98,
+  "pld": 2.11,
+  "density": 1.529,
+  "pill": [
+   "warn",
+   "Channels at the H₂ size limit"
+  ],
+  "text": "In its closed, narrow-pore form MIL-53 has channels about as wide as an H₂ molecule and a helium void fraction of only 0.043. GCMC still fits a few molecules into them: 2.3 g/L at 2 bar and 8.9 g/L at 100 bar. The error bar is large (±3.1 g/L) because insertions this tight are rarely accepted. Pore size near 3 Å doesn't give a clean zero. That's why the floor check is only applied when PLD ≥ 3.2 Å, and why your zero classifier needed LCD as well as PLD.",
+  "init": 500,
+  "cyc": 1000,
+  "cycles": "500 equilibration + 1,000 production",
+  "vfSrc": "helium probe, RASPA Widom"
+ }
+]

@@ -1,0 +1,284 @@
+[
+ {
+  "init": 2000,
+  "cyc": 2000,
+  "cycles": "2,000 equilibration + 2,000 production (hMOF reference length)",
+  "sites": 1,
+  "runsdir": "runs_fh",
+  "ff": "hMOF-matched: UFF + single-site H₂ (36.7 K, 2.958 Å) with Feynman–Hibbs, no charges",
+  "id": "h3001840",
+  "name": "hMOF-3001840",
+  "tag": "Flagged · Cu paddlewheel, dia net",
+  "raspa": "hMOF-3001840",
+  "cells": "2×2×2",
+  "vf": 0.905,
+  "vfSrc": "hMOF metadata; RASPA helium 0.898",
+  "lcd": 22.75,
+  "pld": 19.75,
+  "density": 0.224,
+  "label": {
+   "y2": 2.46,
+   "y100": 8.65
+  },
+  "pill": [
+   "bad",
+   "Label error confirmed: 8.65 → 37.6 g/L"
+  ],
+  "text": "GCMC gives 2.35 g/L at 2 bar, matching the label (2.46), and 37.6 g/L at 100 bar against a label of 8.65. The 100-bar label is 4.3 times too low while the 2-bar label is fine, so whatever went wrong affected only the 100-bar simulation. Its near-twin hMOF-3001465 gives 38.6 g/L under the same settings. Your floor check predicted this: the label sat at 0.31 times the gas-only floor.",
+  "snapdir": "runs_snap",
+  "snap_init": 150,
+  "snap_cyc": 250
+ },
+ {
+  "init": 2000,
+  "cyc": 2000,
+  "cycles": "2,000 equilibration + 2,000 production (hMOF reference length)",
+  "sites": 1,
+  "runsdir": "runs_fh",
+  "ff": "hMOF-matched: UFF + single-site H₂ (36.7 K, 2.958 Å) with Feynman–Hibbs, no charges",
+  "id": "h3001465",
+  "name": "hMOF-3001465",
+  "tag": "Control · same batch, near-identical pore",
+  "raspa": "hMOF-3001465",
+  "cells": "2×2×2",
+  "vf": 0.905,
+  "vfSrc": "hMOF metadata",
+  "lcd": 23.25,
+  "pld": 20.75,
+  "density": null,
+  "label": {
+   "y2": 3.29,
+   "y100": 43.09
+  },
+  "pill": [
+   "ok",
+   "Control · twin of 3001840"
+  ],
+  "text": "Same batch and almost the same pore as hMOF-3001840 (void fraction 0.905, LCD 23.25 Å), with a label that passed the floor check. GCMC gives 3.44 and 38.6 g/L, nearly the same as 3001840's 2.35 and 37.6. Two twins that simulate alike but whose labels differ fivefold: the 8.65 label is the odd one out. The label here (43.1) is 4.5 g/L above my result, the largest of the small 100-bar offsets seen on the controls.",
+  "snapdir": "runs_snap",
+  "snap_init": 150,
+  "snap_cyc": 250
+ },
+ {
+  "init": 2000,
+  "cyc": 2000,
+  "cycles": "2,000 equilibration + 2,000 production (hMOF reference length)",
+  "sites": 1,
+  "runsdir": "runs_fh",
+  "ff": "hMOF-matched: UFF + single-site H₂ (36.7 K, 2.958 Å) with Feynman–Hibbs, no charges",
+  "id": "h3001604",
+  "name": "hMOF-3001604",
+  "tag": "Flagged · Cu paddlewheel, dia net",
+  "raspa": "hMOF-3001604",
+  "cells": "2×2×2",
+  "vf": 0.904,
+  "vfSrc": "hMOF metadata",
+  "lcd": 22.25,
+  "pld": 19.25,
+  "density": null,
+  "label": {
+   "y2": 3.4,
+   "y100": 8.11
+  },
+  "pill": [
+   "bad",
+   "Label error confirmed: 8.11 → 37.7 g/L"
+  ],
+  "text": "The second batch-3001 floor violation, also a Cu-paddlewheel dia framework. GCMC gives 3.11 and 37.7 g/L against labels of 3.40 and 8.11. Same pattern as 3001840: right at 2 bar, about 4.6 times too low at 100 bar. Two out of two confirmed in this batch.",
+  "snapdir": "runs_snap",
+  "snap_init": 150,
+  "snap_cyc": 250
+ },
+ {
+  "init": 2000,
+  "cyc": 2000,
+  "cycles": "2,000 equilibration + 2,000 production (hMOF reference length)",
+  "sites": 1,
+  "runsdir": "runs_fh",
+  "ff": "hMOF-matched: UFF + single-site H₂ (36.7 K, 2.958 Å) with Feynman–Hibbs, no charges",
+  "id": "h7001666",
+  "name": "hMOF-7001666",
+  "tag": "Flagged · Zr, other batch",
+  "raspa": "hMOF-7001666",
+  "cells": "2×3×3",
+  "vf": 0.119,
+  "vfSrc": "RASPA helium on this CIF; metadata says 0.627",
+  "lcd": 3.71,
+  "pld": 1.46,
+  "density": 1.649,
+  "label": {
+   "y2": 7.64,
+   "y100": 9.47
+  },
+  "pill": [
+   "warn",
+   "Descriptor mismatch, not a label error"
+  ],
+  "text": "A different kind of problem. The metadata describes an open pore (void fraction 0.627, LCD 9.25 Å, PLD 7.25 Å), but the CIF is dense: helium void fraction 0.119, LCD 3.7 Å, PLD 1.5 Å, density 1.65 g/cm³. GCMC on the CIF gives 7.71 and 12.0 g/L, close to the labels (7.64 and 9.47). So the uptake labels fit the structure; it's the geometric descriptors that belong to something else. It was flagged only because the floor used the wrong void fraction. Running it in the reference 2×2×2 box gave the same 12.0 g/L.",
+  "snapdir": "runs_snap",
+  "snap_init": 150,
+  "snap_cyc": 250
+ },
+ {
+  "init": 2000,
+  "cyc": 2000,
+  "cycles": "2,000 equilibration + 2,000 production (hMOF reference length)",
+  "sites": 1,
+  "runsdir": "runs_fh",
+  "ff": "hMOF-matched: UFF + single-site H₂ (36.7 K, 2.958 Å) with Feynman–Hibbs, no charges",
+  "id": "h5040736",
+  "name": "hMOF-5040736",
+  "tag": "Control · random normal hMOF (Zn)",
+  "raspa": "hMOF-5040736",
+  "cells": "2×2×2",
+  "vf": null,
+  "lcd": null,
+  "pld": null,
+  "density": null,
+  "label": {
+   "y2": 18.26,
+   "y100": 50.67
+  },
+  "pill": [
+   "ok",
+   "Control reproduced"
+  ],
+  "text": "A randomly chosen normal hMOF. GCMC gives 16.7 and 48.6 g/L against labels of 18.3 and 50.7, so deliverable capacity is 31.9 against 32.4 g/L. This is what agreement looks like with this setup.",
+  "snapdir": "runs_snap",
+  "snap_init": 150,
+  "snap_cyc": 250
+ },
+ {
+  "init": 2000,
+  "cyc": 2000,
+  "cycles": "2,000 equilibration + 2,000 production (hMOF reference length)",
+  "sites": 1,
+  "runsdir": "runs_fh",
+  "ff": "hMOF-matched: UFF + single-site H₂ (36.7 K, 2.958 Å) with Feynman–Hibbs, no charges",
+  "id": "h8081",
+  "name": "hMOF-8081",
+  "tag": "Control · random normal hMOF (Zn, Cl)",
+  "raspa": "hMOF-8081",
+  "cells": "2×3×3",
+  "vf": null,
+  "lcd": null,
+  "pld": null,
+  "density": null,
+  "label": {
+   "y2": 23.06,
+   "y100": 46.68
+  },
+  "pill": [
+   "ok",
+   "Control reproduced"
+  ],
+  "text": "A second random normal hMOF, with strong low-pressure binding. GCMC gives 22.0 and 45.0 g/L against 23.1 and 46.7, and deliverable capacity 23.0 against 23.6 g/L.",
+  "snapdir": "runs_snap",
+  "snap_init": 150,
+  "snap_cyc": 250
+ },
+ {
+  "init": 1000,
+  "cyc": 1000,
+  "cycles": "1,000 equilibration + 1,000 production",
+  "sites": 1,
+  "runsdir": "runs_fh",
+  "ff": "hMOF-matched: UFF + single-site H₂ (36.7 K, 2.958 Å) with Feynman–Hibbs, no charges",
+  "id": "c2010",
+  "name": "CoRE top pick",
+  "tag": "2010[Zn][pyr]3[ASR]1 · rank 1 by prediction",
+  "raspa": "CoRE_2010_Zn_pyr_3_ASR_1",
+  "cells": "1×1×1",
+  "vf": 0.866,
+  "vfSrc": "calibrated Zeo++",
+  "lcd": 13.4,
+  "pld": 9.98,
+  "density": 0.408,
+  "pred": {
+   "y2": 8.29,
+   "y100": 53.83
+  },
+  "pill": [
+   "ok",
+   "Strong performer, 4.4 g/L below prediction"
+  ],
+  "text": "Your top in-domain prediction. GCMC gives 6.59 and 47.8 g/L, so deliverable capacity is 41.2 g/L against the predicted 45.5. The model overestimated by 4.4 g/L, partly because this setup runs slightly low at 100 bar on the controls, but the structure still delivers far more than the hMOF average (23.7 g/L).",
+  "snapdir": "runs_snap",
+  "snap_init": 150,
+  "snap_cyc": 250
+ },
+ {
+  "init": 1000,
+  "cyc": 1000,
+  "cycles": "1,000 equilibration + 1,000 production",
+  "sites": 1,
+  "runsdir": "runs_fh",
+  "ff": "hMOF-matched: UFF + single-site H₂ (36.7 K, 2.958 Å) with Feynman–Hibbs, no charges",
+  "id": "c2007",
+  "name": "CoRE 2007 Zn pcu",
+  "tag": "2007[Zn][pcu]3[ASR]3 · rank 3 by prediction",
+  "raspa": "CoRE_2007_Zn_pcu_3_ASR_3",
+  "cells": "2×2×2",
+  "vf": 0.819,
+  "vfSrc": "calibrated Zeo++",
+  "lcd": 14.79,
+  "pld": 9.04,
+  "density": 0.595,
+  "pred": {
+   "y2": 10.17,
+   "y100": 53.57
+  },
+  "pill": [
+   "ok",
+   "Closest to prediction"
+  ],
+  "text": "A Zn pcu framework close to the hMOF chemistry. GCMC gives 10.0 and 51.2 g/L against predictions of 10.2 and 53.6, so deliverable capacity is 41.2 against 43.4 g/L. It ties with the top pick for the best GCMC capacity among the CoRE structures, with the highest 100-bar uptake.",
+  "snapdir": "runs_snap",
+  "snap_init": 150,
+  "snap_cyc": 250
+ },
+ {
+  "id": "zif1",
+  "name": "ZIF-1 (teaching)",
+  "tag": "Closed cages · GCMC fills cages H₂ can't reach",
+  "raspa": "ZIF-1",
+  "cells": "3×2×2",
+  "init": 500,
+  "cyc": 1000,
+  "cycles": "500 equilibration + 1,000 production",
+  "runsdir": "runs",
+  "ff": "Teaching run: UFF + three-site Darkrim–Levesque H₂, no Feynman–Hibbs",
+  "vf": 0.323,
+  "vfSrc": "RASPA helium",
+  "lcd": 6.47,
+  "pld": 1.88,
+  "density": 1.207,
+  "pill": [
+   "warn",
+   "Uptake in cages H₂ cannot reach"
+  ],
+  "text": "Kept from the first round to show one limitation of GCMC. The windows (1.9 Å) are narrower than H₂, yet standard GCMC inserts molecules directly into the cages and reports 18.3 and 26.1 g/L. With the cages blocked, uptake is 0.0 g/L. This matters for small-pore hMOFs: whether a label counts H₂ in unreachable cages depends on whether pocket blocking was used."
+ },
+ {
+  "id": "zif1b",
+  "name": "ZIF-1, cages blocked",
+  "tag": "Same run with unreachable cages excluded",
+  "raspa": "ZIF-1-blocked",
+  "cells": "3×2×2",
+  "init": 500,
+  "cyc": 1000,
+  "cycles": "500 equilibration + 1,000 production",
+  "runsdir": "runs",
+  "ff": "Teaching run: UFF + three-site Darkrim–Levesque H₂, no Feynman–Hibbs",
+  "vf": 0.323,
+  "vfSrc": "RASPA helium",
+  "lcd": 6.47,
+  "pld": 1.88,
+  "density": 1.207,
+  "pill": [
+   "info",
+   "Pocket blocking on · zero uptake"
+  ],
+  "text": "Identical settings with every cage that H₂ cannot reach blocked. Uptake drops to 0.0 g/L at both pressures."
+ }
+]

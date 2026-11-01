@@ -1,0 +1,10 @@
+g160|C19_FALQOA_clean|4 3 3|__WORK__/runs_160/C19_FALQOA_clean_5
+g77t|C19_FALQOA_clean|4 3 3|__WORK__/runs_m2/C19_FALQOA_clean_100
+g160|C19_BIJJOV_clean|2 2 3|__WORK__/runs_160/C19_BIJJOV_clean_5
+g77t|C19_BIJJOV_clean|2 2 3|__WORK__/runs_m2/C19_BIJJOV_clean_100
+g160|C19_FALQEQ_clean|4 3 3|__WORK__/runs_160/C19_FALQEQ_clean_5
+g77t|C19_FALQEQ_clean|4 3 3|__WORK__/runs_m2/C19_FALQEQ_clean_100
+g160|C19_RAKPEZ_clean|5 1 2|__WORK__/runs_160/C19_RAKPEZ_clean_5
+g77t|C19_RAKPEZ_clean|5 1 2|__WORK__/runs_m2/C19_RAKPEZ_clean_100
+g160|C19_c5dt04033g_c5dt04033g2_clean|2 2 4|__WORK__/runs_160/C19_c5dt04033g_c5dt04033g2_clean_5
+g77t|C19_c5dt04033g_c5dt04033g2_clean|2 2 4|__WORK__/runs_m2/C19_c5dt04033g_c5dt04033g2_clean_100
