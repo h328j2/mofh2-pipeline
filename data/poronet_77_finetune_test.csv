@@ -1,0 +1,3 @@
+target,n,MAE_gL,RMSE_gL,bias_gL,spearman,model
+uptake_77K_100bar_gL,207,0.60132885,1.1608803,0.10728929,0.986015953934907,finetuned
+deliverable_77K100_to_160K5_gL,207,0.5857872,1.1202211,0.10208625,0.9830530029981276,finetuned

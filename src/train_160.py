@@ -4,7 +4,9 @@ Then DOE capacity = GNN 77 K/100 bar prediction - predicted 160 K/5 bar, checked
 import glob, os, sys, copy, pickle, warnings
 import numpy as np, pandas as pd, torch, torch.nn as nn, torch.nn.functional as F
 warnings.filterwarnings("ignore")
-S = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, S)
+S = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SRC = os.path.join(S, "src")
+sys.path.insert(0, SRC)
 import predict_topo as P
 from mofnet import MOFNet
 from extract import parse_data
@@ -22,14 +24,14 @@ def gl(d):
     if not f: return np.nan
     r = parse_data(f[0]); return r["gL"] if r.get("finished") and r.get("gL") is not None else np.nan
 recs = []
-B = pd.read_csv(S + "/core_stageB.csv")
+B = pd.read_csv(S + "/data/core_stageB.csv")
 for _, r in B.iterrows():
     cp = f"{S}/core_cache/{r.raspa}.pkl"
     if not os.path.exists(cp): continue
     f = pickle.load(open(cp, "rb"))
     if f.get("status") != "ok": continue
     recs.append(dict(set="CoRE19-" + r.split, name=r.raspa, feat=f, y=gl(f"{S}/runs_160/{r.raspa}_5"), y77=gl(f"{S}/runs_m2/{r.raspa}_100")))
-lib = pd.read_csv(S + "/real_picks.csv")
+lib = pd.read_csv(S + "/data/real_picks.csv")
 for n in lib[lib.status == "ok"].name:
     recs.append(dict(set="library", name=n, feat=pickle.load(open(f"{S}/real_cache/{n}.pkl", "rb")), y=gl(f"{S}/runs_160/{n}_5"), y77=np.nan))
 ext = ["hMOF-3001465", "hMOF-5040736", "hMOF-8081", "CoRE_2010_Zn_pyr_3_ASR_1", "CoRE_2018_Zr_scu_3_ASR_1", "CoRE_2007_Zn_pcu_3_ASR_3",
@@ -67,10 +69,12 @@ with torch.no_grad():
         POOL.append(torch.cat(ps)); EMB.append(torch.cat(es).numpy()); P77.append(torch.cat(pr).numpy())
 EMB = np.concatenate(EMB, 1); P77 = np.clip(np.mean(P77, 0), 0, None)
 df["gnn77_y100"] = P77[:, 1]
-def finetune(tr, te, use_w, epochs=300):
+def finetune(tr, te, use_w, epochs=300, return_models=False):
     Wn = torch.tensor((Wf - Wf[tr].mean(0)) / Wf[tr].std(0), dtype=torch.float)
+    wmu, wsd = Wf[tr].mean(0), Wf[tr].std(0)
     ymu, ysd = Y[tr].mean(), Y[tr].std(); yt = torch.tensor((Y - ymu) / ysd, dtype=torch.float)[:, None]
     preds = []
+    trained = []
     for seed, net0 in enumerate(base):
         torch.manual_seed(seed)
         gm = copy.deepcopy(net0.global_mlp); hd = copy.deepcopy(net0.head); hd[5] = nn.Linear(64, 1)
@@ -87,8 +91,12 @@ def finetune(tr, te, use_w, epochs=300):
             for k in range(0, len(tr), 32):
                 idx = perm[k:k+32]; opt.zero_grad(); loss = ((f(idx) - yt[idx]) ** 2).mean(); loss.backward(); opt.step()
         gm.eval(); hd.eval()
+        trained.append((seed, net0, gm, hd))
         with torch.no_grad(): preds.append((f(torch.tensor(te)) * ysd + ymu).numpy()[:, 0])
-    return np.mean(preds, 0)
+    out = np.mean(preds, 0)
+    if return_models:
+        return out, trained, (float(ymu), float(ysd), wmu, wsd)
+    return out
 def fit(method, tr, te):
     if method == "henry": return df.henry_gL.values[te]
     if method == "rule": return np.full(len(te), np.nan)
@@ -125,6 +133,59 @@ cands["77 K GCMC - best 160 K model (isolates the 160 K term)"] = d.y77 - d["p16
 for k, v in cands.items():
     rows.append(dict(estimate=k, n=len(d), MAE=float(np.mean(np.abs(v - d.doe_gcmc))), bias=float(np.mean(v - d.doe_gcmc)), spearman=spearmanr(v, d.doe_gcmc)[0]))
 doe = pd.DataFrame(rows); print(doe.round(3).to_string(index=False)); doe.to_csv(S + "/train_160_doe.csv", index=False)
+# Persist the final Widom-enabled ensemble for later prediction.  The checkpoint
+# includes the frozen GNN and all normalization constants needed at inference.
+_, trained_models, norm = finetune(tr, allte, use_w=True, return_models=True)
+ymu, ysd, wmu, wsd = norm
+checkpoint = {
+    "format": "mofh2-160k-finetune-v1",
+    "target": "absolute uptake at 160 K / 5 bar (g/L)",
+    "use_widom": True,
+    "globals": list(P.GLOBALS),
+    "widom_features": ["logkH", "qst0"],
+    "target_mean": ymu,
+    "target_std": ysd,
+    "widom_mean": np.asarray(wmu),
+    "widom_std": np.asarray(wsd),
+    "train_names": df.iloc[tr]["name"].tolist(),
+    "seeds": [],
+}
+for seed, net0, gm, hd in trained_models:
+    checkpoint["seeds"].append({
+        "seed": seed,
+        "base_state_dict": net0.state_dict(),
+        "global_mlp_state_dict": gm.state_dict(),
+        "head_state_dict": hd.state_dict(),
+    })
+checkpoint_dir = S + "/model_repo/models"
+os.makedirs(checkpoint_dir, exist_ok=True)
+checkpoint_path = checkpoint_dir + "/finetune_160_finetuneW_ensemble.pth"
+torch.save(checkpoint, checkpoint_path)
+print("saved", checkpoint_path, flush=True)
+# Also persist the structure-only transfer ensemble.  This is the model used
+# for external datasets that do not publish 160 K Widom features.
+_, structure_models, structure_norm = finetune(tr, allte, use_w=False, return_models=True)
+symu, sysd, _, _ = structure_norm
+structure_checkpoint = {
+    "format": "mofh2-160k-finetune-structure-v1",
+    "target": "absolute uptake at 160 K / 5 bar (g/L)",
+    "use_widom": False,
+    "globals": list(P.GLOBALS),
+    "target_mean": symu,
+    "target_std": sysd,
+    "train_names": df.iloc[tr]["name"].tolist(),
+    "seeds": [],
+}
+for seed, net0, gm, hd in structure_models:
+    structure_checkpoint["seeds"].append({
+        "seed": seed,
+        "base_state_dict": net0.state_dict(),
+        "global_mlp_state_dict": gm.state_dict(),
+        "head_state_dict": hd.state_dict(),
+    })
+structure_checkpoint_path = checkpoint_dir + "/finetune_160_structure_ensemble.pth"
+torch.save(structure_checkpoint, structure_checkpoint_path)
+print("saved", structure_checkpoint_path, flush=True)
 print("77 K GNN error on these:", round(float(np.mean(np.abs(d.gnn77_y100 - d.y77))), 2), "bias", round(float(np.mean(d.gnn77_y100 - d.y77)), 2))
 d.drop(columns=["feat"]).to_csv(S + "/train_160_test_predictions.csv", index=False)
 print("label range 160 K/5 bar: %.2f-%.2f, DOE GCMC %.1f-%.1f" % (Y.min(), Y.max(), d.doe_gcmc.min(), d.doe_gcmc.max()))

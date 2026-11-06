@@ -34,7 +34,7 @@ def zeo(cif):
     s = Structure.from_file(cif)
     with tempfile.TemporaryDirectory() as tmp:
         c = os.path.join(tmp, "s.cif"); CifWriter(s).write_file(c)
-        out = {"density_pmg": s.density}
+        out = {"density_pmg": float(s.density)}
         subprocess.run(["prlimit", "--as=1500000000", ZEO, "-ha", "-res", f"{tmp}/s.res", c], capture_output=True, timeout=900)
         tok = open(f"{tmp}/s.res").read().split()
         out["lcd_zeo"], out["pld_zeo"] = float(tok[1]), float(tok[2])

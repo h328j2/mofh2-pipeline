@@ -1,0 +1,2 @@
+dataset,paper,doi,repository,cif_source,n_mofs,labels,units
+PoroNet H2 benchmark,"Zheng, Gopalan, Shi, JCTC 2026",10.1021/acs.jctc.6c00100,https://github.com/Shi-Research-Group/PoroNet,https://mof.tech.northwestern.edu/mofs/,1990,160 K / 5 bar; 77 K / 100 bar; deliverable difference,g/L
