@@ -10,7 +10,8 @@ DOE swing = uptake(77 K, 100 bar) - uptake(160 K, 5 bar)
 
 The consolidated numerical results and interpretation are in
 [`RESULTS_DISCUSSION.md`](RESULTS_DISCUSSION.md). The broader project report is
-in [`PROJECT_REPORT.md`](PROJECT_REPORT.md).
+in [`PROJECT_REPORT.md`](PROJECT_REPORT.md). The file-by-file repository guide
+is in [`FILE_GUIDE.md`](FILE_GUIDE.md).
 
 The project has two related modeling stages:
 
