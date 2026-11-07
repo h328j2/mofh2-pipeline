@@ -8,6 +8,10 @@ grand-canonical Monte Carlo (GCMC), and estimating the DOE-style hydrogen swing:
 DOE swing = uptake(77 K, 100 bar) - uptake(160 K, 5 bar)
 ```
 
+The consolidated numerical results and interpretation are in
+[`RESULTS_DISCUSSION.md`](RESULTS_DISCUSSION.md). The broader project report is
+in [`PROJECT_REPORT.md`](PROJECT_REPORT.md).
+
 The project has two related modeling stages:
 
 1. **hMOF pretraining:** graph neural networks (GNNs) are trained on the large
