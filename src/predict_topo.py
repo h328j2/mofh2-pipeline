@@ -9,7 +9,10 @@ ZEO = S + "/ext/zeopp-lsmo/zeo++/network"
 CIF_DIR = S + "/tob_test/output_cifs"
 OUT = S + "/topo_predictions.csv"
 NEIGHBOR_CUTOFF = 4.5
-MAX_ATOMS = 600
+# The hMOF checkpoints accept variable-size graphs; this is a resource guard,
+# not an architectural limit. Override it for larger structures when memory
+# and Zeo++ runtime are available, for example MOF_MAX_ATOMS=1200.
+MAX_ATOMS = int(os.environ.get("MOF_MAX_ATOMS", "600"))
 CACHE = S + "/topo_cache"
 os.makedirs(CACHE, exist_ok=True)
 GLOBALS = ["void_fraction", "surface_area_m2g", "surface_area_m2cm3", "lcd", "pld", "density"]

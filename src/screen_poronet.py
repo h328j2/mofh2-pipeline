@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import glob
+import os
 import pickle
 import sys
 from pathlib import Path
@@ -21,6 +22,7 @@ sys.path.insert(0, str(S))
 from mofnet import MOFNet  # noqa: E402
 
 GLOBALS = ["void_fraction", "surface_area_m2g", "surface_area_m2cm3", "lcd", "pld", "density"]
+MAX_ATOMS = int(os.environ.get("MOF_MAX_ATOMS", "600"))
 
 
 def graph(feature: dict) -> Data:
@@ -116,7 +118,7 @@ def main() -> None:
     if len(records) != len(labels):
         print(
             f"screening {len(records)} usable structures; "
-            f"{len(labels) - len(records)} exceed the model's {600}-atom limit",
+            f"{len(labels) - len(records)} exceed the configured {MAX_ATOMS}-atom limit",
             flush=True,
         )
     names = [f["name"] for f in records]

@@ -683,7 +683,8 @@ For a new structure collection, the intended workflow is:
 
 1. Obtain CIF files with stable IDs.
 2. Generate graph and Zeo++ descriptors.
-3. Reject or flag structures above the 600-atom graph limit.
+3. Reject or flag structures above the configured graph limit; increase it with
+   `MOF_MAX_ATOMS` when resources permit.
 4. Run the hMOF/77 K ensemble or the domain-adapted 77 K checkpoint.
 5. Run the structure-only 160 K checkpoint if Widom data is unavailable.
 6. If Widom features exist, use the `finetune+W` 160 K checkpoint.
@@ -822,9 +823,14 @@ high surface area, and large atom counts are especially problematic.
 
 ### 12.2 Graph-size limit
 
-The current graph featurizer rejects structures above 600 atoms. This affects
-coverage and can bias a screening set toward smaller structures. The rejected
-structures should be reported explicitly rather than removed without a count.
+The current default graph-featurizer guard rejects structures above 600 atoms.
+This affects coverage and can bias a screening set toward smaller structures.
+The guard is configurable through `MOF_MAX_ATOMS`, for example
+`MOF_MAX_ATOMS=1200 python src/featurise_poronet.py`; it is not an
+architectural limit of the GNN. Larger structures require more RAM, edge
+construction time, Zeo++ time, and inference time, so the rejected structures
+should be processed incrementally and reported explicitly rather than silently
+truncated.
 
 ### 12.3 RASPA stochasticity
 

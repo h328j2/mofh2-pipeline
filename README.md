@@ -198,7 +198,14 @@ python src/screen_poronet.py
 The resulting `data/poronet_screen_predictions.csv` contains predictions and
 ground-truth labels for every structure accepted by the current 600-atom graph
 limit. Structures above that limit are retained in the benchmark label table
-but are reported as uncovered rather than silently truncated.
+but are reported as uncovered rather than silently truncated. The limit is a
+configurable resource guard rather than a fixed GNN requirement: set
+`MOF_MAX_ATOMS` before featurization, for example
+`MOF_MAX_ATOMS=1200 python src/featurise_poronet.py`. Larger graphs require
+more RAM, edge-construction time, Zeo++ time, and inference time, so they
+should be processed incrementally. The CoRE pore-screening prefilter uses the
+same `MOF_MAX_ATOMS` setting and separately supports
+`MOF_MAX_SIM_ATOMS` for the replicated simulation-cell atom budget.
 
 ### 3. Real-library and external structures
 

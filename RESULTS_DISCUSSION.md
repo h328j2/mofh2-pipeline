@@ -681,9 +681,12 @@ main test result is encouraging, but confidence intervals are wide.
 
 ### 13.4 PoroNet coverage
 
-Only 1,033 of 1,990 PoroNet structures were featurized under the 600-atom
-limit. The fine-tuning result therefore applies directly to the accepted
-subset, not automatically to the 957 rejected structures.
+Only 1,033 of 1,990 PoroNet structures were featurized under the default
+600-atom guard. The guard can be increased with `MOF_MAX_ATOMS`, but the
+fine-tuning result reported here applies directly to the accepted subset, not
+automatically to the 957 rejected structures. Larger graphs should be processed
+incrementally because graph memory, neighbor construction, and Zeo++ runtime
+increase with structure size.
 
 ### 13.5 No direct QMOF DOE validation
 
@@ -755,4 +758,3 @@ The strongest current production combination is therefore:
 DOE ranking:    difference of the endpoint predictions with uncertainty/domain flags
 Final proof:    targeted RASPA GCMC and, ultimately, experimental validation
 ```
-

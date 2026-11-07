@@ -3,6 +3,8 @@ from multiprocessing import Pool
 S = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, S)
 from predict_topo import ZEO
 D = S + "/coredl/MOFSimplify/CoRE2019"
+MAX_ATOMS = int(os.environ.get("MOF_MAX_ATOMS", "600"))
+MAX_SIM_ATOMS = int(os.environ.get("MOF_MAX_SIM_ATOMS", "6000"))
 def res(fn):
     with tempfile.TemporaryDirectory() as t:
         try:
@@ -12,7 +14,7 @@ def res(fn):
 if __name__ == "__main__":
     d = pd.read_csv(S + "/core_meta.csv")
     d["ncells"] = d.cells.str.split().apply(lambda x: np.prod(list(map(int, x))))
-    m = (d.n_atoms <= 600) & d.metals.notna() & d.density.between(0.2, 2.2) & d.H & (d.n_atoms * d.ncells <= 6000)
+    m = (d.n_atoms <= MAX_ATOMS) & d.metals.notna() & d.density.between(0.2, 2.2) & d.H & (d.n_atoms * d.ncells <= MAX_SIM_ATOMS)
     fs = list(d[m].file)
     with Pool(2) as p: out = p.map(res, fs, chunksize=20)
     pd.DataFrame(out, columns=["file", "lcd_raw", "pld_raw"]).to_csv(S + "/core_res.csv", index=False); print("done", len(out))
