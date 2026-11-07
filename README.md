@@ -207,6 +207,17 @@ should be processed incrementally. The CoRE pore-screening prefilter uses the
 same `MOF_MAX_ATOMS` setting and separately supports
 `MOF_MAX_SIM_ATOMS` for the replicated simulation-cell atom budget.
 
+All 957 structures excluded by the default limit have also been evaluated with
+the memory-bounded `src/screen_poronnet_large.py` utility after featurization
+at `MOF_MAX_ATOMS=5000`. The predicted-versus-actual results are in
+`data/poronet_excluded_predicted_vs_actual.csv`. Reproduce the inference with:
+
+```bash
+MOF_MAX_ATOMS=5000 python src/screen_poronnet_large.py \
+  --cache data/poronet_cache_large \
+  --batch-size 2 --chunk-size 8
+```
+
 ### 3. Real-library and external structures
 
 `data/real_picks.csv` records the real-library structures used during transfer.

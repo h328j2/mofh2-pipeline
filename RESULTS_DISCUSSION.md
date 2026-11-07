@@ -681,12 +681,35 @@ main test result is encouraging, but confidence intervals are wide.
 
 ### 13.4 PoroNet coverage
 
-Only 1,033 of 1,990 PoroNet structures were featurized under the default
-600-atom guard. The guard can be increased with `MOF_MAX_ATOMS`, but the
-fine-tuning result reported here applies directly to the accepted subset, not
-automatically to the 957 rejected structures. Larger graphs should be processed
-incrementally because graph memory, neighbor construction, and Zeo++ runtime
-increase with structure size.
+Under the default 600-atom guard, 1,033 of 1,990 PoroNet structures were
+accepted and 957 were rejected. The guard was then raised to 5,000 atoms and
+all 1,990 structures were featurized successfully. The previously rejected
+subset contains 603--4,704 atoms (median 1,074), so it is substantially more
+expensive to process than the accepted subset. Larger graphs must be processed
+incrementally because graph memory and inference time grow rapidly.
+
+The excluded structures were evaluated independently with a streaming
+inference utility (`src/screen_poronnet_large.py`) and saved to
+`data/poronet_excluded_predicted_vs_actual.csv`. This CSV contains the actual
+160 K and DOE labels, baseline and adapted predictions, ensemble uncertainty,
+descriptor-domain diagnostics, atom counts, and absolute errors for all 957
+structures.
+
+| Excluded-subset metric | 160 K uptake | DOE baseline | DOE adapted |
+|---|---:|---:|---:|
+| MAE (g/L) | 0.221 | 5.426 | 0.572 |
+| RMSE (g/L) | 0.393 | 6.331 | 1.023 |
+| Bias (g/L) | -0.097 | +5.078 | +0.181 |
+| Spearman rank correlation | 0.871 | 0.668 | 0.990 |
+
+The adapted 77 K model therefore generalizes well even to the previously
+excluded large-graph region, while the unadapted 77 K baseline substantially
+overestimates DOE capacity. The adapted DOE MAE is close to the 0.586 g/L
+held-out MAE from the accepted-structure fine-tuning split, but the excluded
+subset has a larger RMSE because a small number of very large or
+out-of-domain structures produce large residuals. Of the 957 structures, 685
+exceed the descriptor-domain threshold (`max_abs_descriptor_z >= 3`), so these
+predictions should still be prioritized for RASPA confirmation.
 
 ### 13.5 No direct QMOF DOE validation
 
