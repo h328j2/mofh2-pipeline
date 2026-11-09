@@ -1,6 +1,6 @@
 # MOF Hydrogen-Storage Screening and DOE-Swing Transfer Learning
 
-This repository contains a reproducible workflow for predicting gravimetric/volumetric
+This repository contains a reproducible workflow for predicting volumetric
 hydrogen uptake in metal-organic frameworks (MOFs), validating predictions with RASPA
 grand-canonical Monte Carlo (GCMC), and estimating the DOE-style hydrogen swing:
 
@@ -459,8 +459,7 @@ bash rq_any.sh queues/05_core2019_160K.txt 11
 
 - The hMOF pretraining domain is hypothetical and does not cover every real-MOF
   chemistry.
-- The 160 K transfer target is volumetric uptake in g/L; it is not gravimetric
-  wt% unless explicitly converted using framework density/mass conventions.
+- The 160 K transfer target is volumetric uptake in g/L.
 - The Widom-refined model requires reliable 160 K Widom calculations.
 - Candidates with unseen elements or extreme descriptor z-scores are flagged by
   `in_domain` and should not be treated as equally reliable.
