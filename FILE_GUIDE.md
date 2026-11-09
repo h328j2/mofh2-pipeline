@@ -254,6 +254,28 @@ The main CoRE screening predictor. It combines 77 K GNN predictions with a
 160 K discharge estimate, calculates DOE capacity, propagates ensemble
 uncertainty, and records applicability-domain and element flags.
 
+Its output now also contains gravimetric forms of the uptake and DOE columns.
+These are deterministic density-normalized values, not an independently
+trained neural-network head.
+
+### `src/gravimetric.py`
+
+Shared conversion utility for adding gravimetric hydrogen uptake to existing
+CSV tables. It converts volumetric g/L columns to both mg H2/g framework and
+wt% using the row-specific framework density. It can read density directly
+from a table or recover it from a feature-cache pickle by structure ID.
+
+The conversion is exact for this repository's convention because
+`src/extract.py` computes:
+
+```text
+g/L = (mg/g framework) * (framework density kg/m^3) / 1000
+```
+
+The utility therefore avoids training a redundant model for a quantity that is
+already determined by the predicted volumetric uptake and the structure's
+density.
+
 ### `src/screen_featurise.py`
 
 Fast Zeo++ and graph featurization for the accessible, family-unique CoRE 2019
@@ -529,6 +551,11 @@ applicability-domain flags.
   957 structures originally excluded by the 600-atom guard. It includes actual
   labels, baseline and adapted predictions, uncertainty, errors, atom counts,
   pore descriptors, and applicability-domain status.
+- `poronet_screen_predictions_gravimetric.csv`,
+  `poronet_screen_predictions_77_finetuned_gravimetric.csv`, and
+  `poronet_excluded_predicted_vs_actual_gravimetric.csv`: corresponding tables
+  with `mg_per_g` and `wt_percent` columns for actual and predicted uptake,
+  endpoint values, and DOE capacity.
 
 The untracked `data/poronet_cache_large/` directory contains the regenerated
 large graph features. It is ignored intentionally and is not required in Git
@@ -646,4 +673,3 @@ For a quick answer:
 4. Use `PROJECT_REPORT.md` for the full scientific record.
 5. Use `REPRODUCTION_REPORT.md` to rerun a stage.
 6. Use this guide when a file’s provenance or role is unclear.
-

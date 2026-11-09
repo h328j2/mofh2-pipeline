@@ -20,6 +20,7 @@ from torch_geometric.nn import global_mean_pool
 S = Path(__file__).resolve().parent
 sys.path.insert(0, str(S))
 from mofnet import MOFNet  # noqa: E402
+from gravimetric import add_gravimetric_columns  # noqa: E402
 
 GLOBALS = ["void_fraction", "surface_area_m2g", "surface_area_m2cm3", "lcd", "pld", "density"]
 MAX_ATOMS = int(os.environ.get("MOF_MAX_ATOMS", "600"))
@@ -138,6 +139,7 @@ def main() -> None:
     labels["abs_error_deliverable_gL"] = abs(
         labels["pred_deliverable_gL"] - labels["deliverable_77K100_to_160K5_gL"]
     )
+    labels = add_gravimetric_columns(labels, density=labels["density"])
     labels.sort_values("pred_deliverable_gL", ascending=False).to_csv(args.output, index=False)
     print(f"saved {args.output} ({len(labels)} structures)")
     print(labels[["abs_error_160K_gL", "abs_error_deliverable_gL"]].mean().round(4).to_string())
