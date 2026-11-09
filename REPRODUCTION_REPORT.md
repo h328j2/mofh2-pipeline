@@ -258,11 +258,11 @@ Do not silently substitute another force field when reproducing labels. The
 repository also includes `UFF_FH` and `UFF_noFHH2`, but those are alternate
 conventions used for comparison.
 
-The parser converts RASPA absolute loading from mg/g framework to g/L using the
-framework density:
+The parser converts the raw RASPA loading to the project's volumetric g/L
+convention using the framework density:
 
 ```text
-uptake_gL = uptake_mg_per_g * framework_density_kg_per_m3 / 1000
+uptake_gL = raw_loading * framework_density_kg_per_m3 / 1000
 ```
 
 GCMC is stochastic. Independent runs should be compared using block errors and
