@@ -89,35 +89,7 @@ DOE swing = y77_100 - y160_5
 
 where both terms are absolute volumetric uptake values in g/L.
 
-### 2.3 Gravimetric outputs
-
-The pipeline now reports gravimetric uptake alongside the volumetric values.
-RASPA already provides the absolute loading in `mg H2/g framework`, and
-`src/extract.py` also extracts the framework density. Feature-cache densities
-are stored in g/cm³, while RASPA text output uses kg/m³; the shared converter
-normalizes both to kg/m³. For tables that contain volumetric uptake and
-density, the equivalent quantities are calculated as:
-
-```text
-mg H2/g MOF = uptake_gL / density_kg_m3 * 1000
-wt%         = uptake_gL / density_kg_m3 * 100
-```
-
-The gravimetric DOE swing is calculated from the same endpoints:
-
-```text
-DOE_gravimetric = wt%(77 K / 100 bar) - wt%(160 K / 5 bar)
-```
-
-This is a deterministic normalization of the volumetric prediction using the
-individual structure's density; it is not an independently trained neural
-network target. This is preferable while the available labels are generated
-under the same absolute RASPA convention, because it guarantees consistency
-between volumetric and gravimetric predictions. The shared implementation is
-`src/gravimetric.py`, and generated examples use the suffixes
-`_mg_per_g` and `_wt_percent`.
-
-### 2.4 Important distinction between targets
+### 2.2 Important distinction between targets
 
 Several datasets in the project use different definitions. They must not be
 mixed without an explicit conversion:

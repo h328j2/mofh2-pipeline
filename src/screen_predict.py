@@ -12,7 +12,6 @@ from widom import widom
 from torch_geometric.data import Data
 from torch_geometric.loader import DataLoader
 from torch_geometric.nn import global_mean_pool
-from gravimetric import add_gravimetric_columns
 REFINE = len(sys.argv) > 1 and sys.argv[1] == "refine"
 def gl(d):
     f = glob.glob(f"{d}/Output/System_0/*.data")
@@ -120,12 +119,6 @@ out["max_abs_z"] = np.abs((out[P.GLOBALS].values.astype(float) - gmu) / gsd).max
 out["unseen_el"] = [",".join(sorted(set(e) - SEEN)) for e in out.elements]
 out["in_domain"] = (out.max_abs_z < 3) & (out.unseen_el == "")
 out["doe_dc"] = out.gnn77_y100 - out.p160
-out = add_gravimetric_columns(
-    out,
-    density=out["density"],
-    suffix="",
-    columns=["gnn77_y100", "gnn77_dc", "p160", "doe_dc"],
-)
 out = out.drop(columns=["path", "set", "y", "elements"], errors="ignore").sort_values("doe_dc", ascending=False)
 out.to_csv(S + ("/screen_core2019_refined.csv" if REFINE else "/screen_core2019.csv"), index=False)
 pd.set_option("display.width", 220)

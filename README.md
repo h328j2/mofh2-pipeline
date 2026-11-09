@@ -13,35 +13,6 @@ The consolidated numerical results and interpretation are in
 in [`PROJECT_REPORT.md`](PROJECT_REPORT.md). The file-by-file repository guide
 is in [`FILE_GUIDE.md`](FILE_GUIDE.md).
 
-## Gravimetric uptake
-
-The pipeline now adds gravimetric uptake alongside volumetric uptake. Because
-RASPA provides framework density and volumetric uptake in a consistent absolute
-convention, the conversion is deterministic:
-
-```text
-mg H2/g MOF = uptake_gL / density_kg_m3 * 1000
-wt%         = uptake_gL / density_kg_m3 * 100
-```
-
-Feature-cache densities are stored in g/cm³ and are converted to kg/m³
-internally; RASPA density values may already be in kg/m³.
-
-Use `src/gravimetric.py` to enrich an existing result table:
-
-```bash
-python src/gravimetric.py \
-  --input data/poronet_screen_predictions.csv \
-  --output data/poronet_screen_predictions_gravimetric.csv \
-  --cache data/poronet_cache
-```
-
-The screening scripts also add these columns to newly generated PoroNet and
-CoRE outputs. Existing enriched examples include
-`data/poronet_excluded_predicted_vs_actual_gravimetric.csv`,
-`data/poronet_screen_predictions_77_finetuned_gravimetric.csv`, and
-`data/screen_core2019_refined_gravimetric.csv`.
-
 The project has two related modeling stages:
 
 1. **hMOF pretraining:** graph neural networks (GNNs) are trained on the large

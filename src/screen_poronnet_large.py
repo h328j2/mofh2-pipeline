@@ -16,7 +16,6 @@ from torch_geometric.loader import DataLoader
 from torch_geometric.nn import global_mean_pool
 
 from mofnet import MOFNet
-from gravimetric import add_gravimetric_columns
 
 ROOT = Path(__file__).resolve().parent.parent
 GLOBALS = ["void_fraction", "surface_area_m2g", "surface_area_m2cm3", "lcd", "pld", "density"]
@@ -163,7 +162,7 @@ def main() -> None:
         )
         label["max_abs_descriptor_z"] = z
         label["in_descriptor_domain"] = z < 3
-        rows.append(add_gravimetric_columns(label, density=label["density"]))
+        rows.append(label)
         print(f"processed {min(start + len(names), len(excluded))}/{len(excluded)}", flush=True)
 
     out = pd.concat(rows, ignore_index=True).sort_values("pred_DOE_adapted_gL", ascending=False)
