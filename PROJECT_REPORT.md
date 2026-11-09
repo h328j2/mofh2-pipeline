@@ -93,8 +93,10 @@ where both terms are absolute volumetric uptake values in g/L.
 
 The pipeline now reports gravimetric uptake alongside the volumetric values.
 RASPA already provides the absolute loading in `mg H2/g framework`, and
-`src/extract.py` also extracts the framework density. For tables that contain
-volumetric uptake and density, the equivalent quantities are calculated as:
+`src/extract.py` also extracts the framework density. Feature-cache densities
+are stored in g/cm³, while RASPA text output uses kg/m³; the shared converter
+normalizes both to kg/m³. For tables that contain volumetric uptake and
+density, the equivalent quantities are calculated as:
 
 ```text
 mg H2/g MOF = uptake_gL / density_kg_m3 * 1000

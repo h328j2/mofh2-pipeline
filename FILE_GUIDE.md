@@ -262,7 +262,8 @@ trained neural-network head.
 
 Shared conversion utility for adding gravimetric hydrogen uptake to existing
 CSV tables. It converts volumetric g/L columns to both mg H2/g framework and
-wt% using the row-specific framework density. It can read density directly
+wt% using the row-specific framework density. Feature caches use g/cm³ and
+RASPA output uses kg/m³; the utility normalizes either representation. It can read density directly
 from a table or recover it from a feature-cache pickle by structure ID.
 
 The conversion is exact for this repository's convention because

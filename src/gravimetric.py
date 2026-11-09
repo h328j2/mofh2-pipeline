@@ -1,7 +1,7 @@
 """Convert volumetric hydrogen uptake columns to gravimetric uptake.
 
-The project stores absolute uptake as g/L and framework density as kg/m^3.
-Those units are numerically equivalent to g/L for the framework, so:
+The project feature caches store framework density as g/cm^3, while RASPA
+reports it as kg/m^3. After normalizing density to kg/m^3:
 
     mg_H2/g_framework = uptake_gL / density_kg_m3 * 1000
     wt_percent        = uptake_gL / density_kg_m3 * 100
@@ -25,6 +25,7 @@ def add_gravimetric_columns(
     density: pd.Series | np.ndarray | None = None,
     suffix: str = "_gL",
     columns: list[str] | None = None,
+    density_unit: str = "auto",
 ) -> pd.DataFrame:
     """Add mg/g and wt% columns for uptake-like volumetric columns."""
     out = table.copy()
@@ -38,6 +39,14 @@ def add_gravimetric_columns(
     density = pd.to_numeric(pd.Series(density, index=out.index), errors="coerce")
     if (density.dropna() <= 0).any():
         raise ValueError("Every available framework density must be positive")
+    if density_unit == "auto":
+        density_unit = "kg_m3" if any(
+            name in out.columns and name.endswith("kg_m3")
+            for name in ("density_kg_m3",)
+        ) else "g_cm3"
+    if density_unit not in {"g_cm3", "kg_m3"}:
+        raise ValueError("density_unit must be 'g_cm3', 'kg_m3', or 'auto'")
+    density_kg_m3 = density if density_unit == "kg_m3" else density * 1000.0
 
     candidates = columns if columns is not None else list(out.columns)
     for column in candidates:
@@ -47,8 +56,8 @@ def add_gravimetric_columns(
             continue
         prefix = column[: -len(suffix)] if suffix else column
         values = pd.to_numeric(out[column], errors="coerce")
-        out[f"{prefix}_mg_per_g"] = values / density * 1000.0
-        out[f"{prefix}_wt_percent"] = values / density * 100.0
+        out[f"{prefix}_mg_per_g"] = values / density_kg_m3 * 1000.0
+        out[f"{prefix}_wt_percent"] = values / density_kg_m3 * 100.0
     return out
 
 
@@ -71,6 +80,7 @@ def main() -> None:
     parser.add_argument("--cache", type=Path)
     parser.add_argument("--id-column", default="mof")
     parser.add_argument("--density-column", default="density")
+    parser.add_argument("--density-unit", choices=["auto", "g_cm3", "kg_m3"], default="auto")
     parser.add_argument(
         "--columns",
         help="Comma-separated uptake columns when names do not end in _gL",
@@ -87,8 +97,13 @@ def main() -> None:
         density = _densities_from_cache(table, args.cache, args.id_column)
         table["density"] = density
     columns = args.columns.split(",") if args.columns else None
-    table = add_gravimetric_columns(table, density=density, suffix="" if columns else "_gL",
-                                    columns=columns)
+    table = add_gravimetric_columns(
+        table,
+        density=density,
+        suffix="" if columns else "_gL",
+        columns=columns,
+        density_unit=args.density_unit,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     table.to_csv(args.output, index=False)
     print(f"saved {args.output} ({len(table)} rows)")

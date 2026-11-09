@@ -24,6 +24,9 @@ mg H2/g MOF = uptake_gL / density_kg_m3 * 1000
 wt%         = uptake_gL / density_kg_m3 * 100
 ```
 
+Feature-cache densities are stored in g/cm³ and are converted to kg/m³
+internally; RASPA density values may already be in kg/m³.
+
 Use `src/gravimetric.py` to enrich an existing result table:
 
 ```bash
